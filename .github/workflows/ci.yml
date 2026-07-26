@@ -51,3 +51,21 @@ jobs:
       - name: Build Docker image (tagged with commit SHA)
         run: |
           docker build -t learningsteps-app:${{ github.sha }} .
+
+  secrets_scan:
+    name: Secrets scan
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository with full git history so Gitleaks can scan every commit.
+      - name: Checkout repository with full history
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Run Gitleaks on the full repository history to detect secrets in code or git history.
+      - name: Run Gitleaks
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          args: --source . --verbose
+          config: ''
