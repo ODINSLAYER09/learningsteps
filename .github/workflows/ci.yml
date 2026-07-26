@@ -15,6 +15,10 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    env:
+      ACR_SERVER: ${{ secrets.ACR_SERVER }}
+      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+      ACR__PASSWORD: ${{ secrets.ACR__PASSWORD }}
 
     steps:
       # Checkout the repository to the runner workspace so subsequent steps can access the code
@@ -50,7 +54,33 @@ jobs:
       # Build a Docker image and tag it with the commit SHA for traceability.
       - name: Build Docker image (tagged with commit SHA)
         run: |
-          docker build -t learningsteps-app:${{ github.sha }} .
+          IMAGE_REF="${{ secrets.ACR_SERVER }}/learningsteps-app:${{ github.sha }}"
+          docker build -t "$IMAGE_REF" .
+
+      # Scan the built image with Trivy v0.36.0 before pushing to ACR.
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ secrets.ACR_SERVER }}/learningsteps-app:${{ github.sha }}
+          scan-type: image
+          format: table
+
+      # Login to Azure Container Registry using environment variables from GitHub.
+      - name: Login to Azure Container Registry
+        run: |
+          echo "${{ env.ACR__PASSWORD }}" | docker login ${{ env.ACR_SERVER }} -u "${{ env.ACR_USERNAME }}" --password-stdin
+        env:
+          ACR__PASSWORD: ${{ secrets.ACR_PASSWORD }}
+          ACR_SERVER: ${{ secrets.ACR_SERVER }}
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+
+      # Push the scanned image to Azure Container Registry.
+      - name: Push Docker image to ACR
+        run: |
+          IMAGE_REF="${{ env.ACR_SERVER }}/learningsteps-app:${{ github.sha }}"
+          docker push "$IMAGE_REF"
+        env:
+          ACR_SERVER: ${{ secrets.ACR_SERVER }}
 
   secrets_scan:
     name: Secrets scan
