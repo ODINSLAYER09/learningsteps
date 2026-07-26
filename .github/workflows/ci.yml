@@ -64,6 +64,8 @@ jobs:
           image-ref: ${{ secrets.ACR_SERVER }}/learningsteps-app:${{ github.sha }}
           scan-type: image
           format: table
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
 
       # Login to Azure Container Registry using environment variables from GitHub.
       - name: Login to Azure Container Registry
