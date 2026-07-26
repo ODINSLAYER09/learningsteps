@@ -1,0 +1,53 @@
+# GitHub Actions workflow for LearningSteps project
+# Name: Learningsteps CI
+# Triggers: push to `main`, pull_request events, and manual dispatch
+name: "Learningsteps CI"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+# Single job that runs on Ubuntu to: checkout code, setup Python, run lint/tests, and build the image
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository to the runner workspace so subsequent steps can access the code
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      # Install Python 3.13 on the runner so we can install dependencies and run tests
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      # Install dependencies from the API requirements file. This ensures the test/runtime deps are available.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r api/requirements.txt
+
+      # Run ruff linter. This step is non-blocking (won't fail the job) but will surface issues as a warning.
+      - name: Lint with ruff (non-blocking)
+        continue-on-error: true
+        run: |
+          # Install ruff (if not included in requirements) and run checks on the API package
+          python -m pip install --upgrade ruff || true
+          ruff check api || true
+
+      # Run the test suite using pytest. This is the gate that must pass for CI to succeed.
+      - name: Run tests (pytest)
+        run: |
+          python -m pip install --upgrade pytest
+          pytest -q
+
+      # Build a Docker image and tag it with the commit SHA for traceability.
+      - name: Build Docker image (tagged with commit SHA)
+        run: |
+          docker build -t learningsteps-app:${{ github.sha }} .

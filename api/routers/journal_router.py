@@ -60,7 +60,16 @@ async def get_entry(request: Request, entry_id: str, entry_service: EntryService
     
     Hint: Check the update_entry endpoint for similar patterns
     """
-    raise HTTPException(status_code=501, detail="Not implemented - complete this endpoint!")
+    try:
+        entry = await entry_service.get_entry(entry_id)
+        if not entry:
+            raise HTTPException(status_code=404, detail="Entry not found")
+        return entry
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.exception("Error fetching entry %s", entry_id)
+        raise HTTPException(status_code=500, detail=f"Error fetching entry: {str(e)}")
 
 @router.patch("/entries/{entry_id}")
 async def update_entry(entry_id: str, entry_update: dict, entry_service: EntryService = Depends(get_entry_service)):
