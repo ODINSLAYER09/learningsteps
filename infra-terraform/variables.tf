@@ -1,6 +1,7 @@
 variable "resource_group_name" {
-  description = "Name of the Azure resource group."
+  description = "Name of the Azure resource group. Set this to the existing imported RG name."
   type        = string
+  default     = "evolution-rg"
 }
 
 variable "subscription_id" {

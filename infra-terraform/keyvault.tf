@@ -7,15 +7,17 @@ resource "azurerm_key_vault" "kv" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = var.key_vault_sku
 
-  purge_protection_enabled  = false
+  public_network_access_enabled = true
+  purge_protection_enabled      = false
+  soft_delete_retention_days    = 90
 
   network_acls {
-    default_action = "Deny"
+    default_action = "Allow"
     bypass         = "AzureServices"
-    virtual_network_subnet_ids = [
-      try(azurerm_subnet.aks.id, null),
-      try(azurerm_subnet.database.id, null),
-    ]
+    virtual_network_subnet_ids = compact([
+      azurerm_subnet.aks.id,
+      azurerm_subnet.database.id,
+    ])
   }
 
   tags = var.tags
@@ -49,4 +51,6 @@ resource "azurerm_key_vault_secret" "postgres_admin_password" {
   name         = "postgres-admin-password"
   value        = var.postgres_admin_password
   key_vault_id = azurerm_key_vault.kv.id
+
+  depends_on = [azurerm_key_vault_access_policy.owner, azurerm_key_vault_access_policy.aks]
 }

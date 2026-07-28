@@ -24,10 +24,18 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   geo_redundant_backup_enabled = false
   delegated_subnet_id         = azurerm_subnet.database.id
   private_dns_zone_id         = azurerm_private_dns_zone.postgres.id
+  public_network_access_enabled = false
 
   sku_name = var.postgres_sku_name
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      zone,
+      high_availability[0].standby_availability_zone
+    ]
+  }
 
   timeouts {
     create = "60m"

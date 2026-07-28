@@ -13,23 +13,31 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "aks" {
-  name                 = var.aks_subnet_name
-  resource_group_name  = azurerm_resource_group.infra.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [var.aks_subnet_prefix]
+  name                                  = var.aks_subnet_name
+  resource_group_name                   = azurerm_resource_group.infra.name
+  virtual_network_name                  = azurerm_virtual_network.vnet.name
+  address_prefixes                      = [var.aks_subnet_prefix]
+  service_endpoints                     = ["Microsoft.KeyVault"]
+  private_endpoint_network_policies     = "Disabled"
+  private_link_service_network_policies_enabled = false
 
-  delegation {
-    name = "aks-delegation"
-
-    service_delegation {
-      name = "Microsoft.ContainerService/managedClusters"
-    }
-  }
 }
 
 resource "azurerm_subnet" "database" {
-  name                 = var.db_subnet_name
-  resource_group_name  = azurerm_resource_group.infra.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [var.db_subnet_prefix]
+  name                                  = var.db_subnet_name
+  resource_group_name                   = azurerm_resource_group.infra.name
+  virtual_network_name                  = azurerm_virtual_network.vnet.name
+  address_prefixes                      = [var.db_subnet_prefix]
+  service_endpoints                     = ["Microsoft.KeyVault"]
+  private_endpoint_network_policies     = "Disabled"
+  private_link_service_network_policies_enabled = false
+
+  delegation {
+    name = "postgresql-delegation"
+
+    service_delegation {
+      name    = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+    }
+  }
 }
