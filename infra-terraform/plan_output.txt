@@ -1,0 +1,254 @@
+﻿data.azurerm_client_config.current: Reading...
+azurerm_resource_group.infra: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg]
+data.azurerm_client_config.current: Read complete after 0s [id=Y2xpZW50Q29uZmlncy9jbGllbnRJZD0wNGIwNzc5NS04ZGRiLTQ2MWEtYmJlZS0wMmY5ZTFiZjdiNDY7b2JqZWN0SWQ9NTQyZGJjMWMtN2ExOS00ZjUyLWI3YjUtYWQ5NDU1M2M4MmJlO3N1YnNjcmlwdGlvbklkPTZhOWEwY2E0LWQxN2MtNGNhZi1hNGQ1LTI1NzQ3ZDgyOTk1Yzt0ZW5hbnRJZD1jMDUzMTQ4NC01MGZhLTRmZjItOTdkZi1iMWYyZDQ4MTA2MDM=]
+azurerm_private_dns_zone.postgres: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com]
+azurerm_virtual_network.vnet: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet]
+azurerm_subnet.aks: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet/subnets/aks-subnet]
+azurerm_subnet.database: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet/subnets/db-subnet]
+azurerm_private_dns_zone_virtual_network_link.postgres_vnet_link: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com/virtualNetworkLinks/postgres-vnet-link]
+azurerm_key_vault.kv: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.KeyVault/vaults/evolution-kv]
+azurerm_key_vault_access_policy.owner: Refreshing state... [id=/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.KeyVault/vaults/evolution-kv/objectId/542dbc1c-7a19-4f52-b7b5-ad94553c82be]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # azurerm_key_vault.kv will be updated in-place
+  ~ resource "azurerm_key_vault" "kv" {
+        id                              = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.KeyVault/vaults/evolution-kv"
+        name                            = "evolution-kv"
+      ~ tags                            = {
+          - "created-on"  = "2026-07-27T21:25:37.5927499Z" -> null
+            "environment" = "dev"
+            "project"     = "learningsteps"
+        }
+        # (14 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+  # azurerm_key_vault_access_policy.aks will be created
+  + resource "azurerm_key_vault_access_policy" "aks" {
+      + id                 = (known after apply)
+      + key_vault_id       = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.KeyVault/vaults/evolution-kv"
+      + object_id          = (known after apply)
+      + secret_permissions = [
+          + "Get",
+          + "List",
+        ]
+      + tenant_id          = "c0531484-50fa-4ff2-97df-b1f2d4810603"
+    }
+
+  # azurerm_key_vault_secret.postgres_admin_password will be created
+  + resource "azurerm_key_vault_secret" "postgres_admin_password" {
+      + id                      = (known after apply)
+      + key_vault_id            = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.KeyVault/vaults/evolution-kv"
+      + name                    = "postgres-admin-password"
+      + resource_id             = (known after apply)
+      + resource_versionless_id = (known after apply)
+      + value                   = (sensitive value)
+      + value_wo                = (write-only attribute)
+      + version                 = (known after apply)
+      + versionless_id          = (known after apply)
+    }
+
+  # azurerm_kubernetes_cluster.aks will be created
+  + resource "azurerm_kubernetes_cluster" "aks" {
+      + ai_toolchain_operator_enabled       = false
+      + current_kubernetes_version          = (known after apply)
+      + dns_prefix                          = "learningsteps-aks-dns"
+      + fqdn                                = (known after apply)
+      + http_application_routing_zone_name  = (known after apply)
+      + id                                  = (known after apply)
+      + kube_admin_config                   = (sensitive value)
+      + kube_admin_config_raw               = (sensitive value)
+      + kube_config                         = (sensitive value)
+      + kube_config_raw                     = (sensitive value)
+      + kubernetes_version                  = (known after apply)
+      + location                            = "germanywestcentral"
+      + name                                = "learningsteps-aks"
+      + node_os_upgrade_channel             = "NodeImage"
+      + node_resource_group                 = (known after apply)
+      + node_resource_group_id              = (known after apply)
+      + oidc_issuer_enabled                 = (known after apply)
+      + oidc_issuer_url                     = (known after apply)
+      + portal_fqdn                         = (known after apply)
+      + private_cluster_enabled             = false
+      + private_cluster_public_fqdn_enabled = false
+      + private_dns_zone_id                 = (known after apply)
+      + private_fqdn                        = (known after apply)
+      + resource_group_name                 = "evolution-rg"
+      + role_based_access_control_enabled   = true
+      + run_command_enabled                 = true
+      + sku_tier                            = "Free"
+      + support_plan                        = "KubernetesOfficial"
+      + tags                                = {
+          + "environment" = "dev"
+          + "project"     = "learningsteps"
+        }
+      + workload_identity_enabled           = false
+
+      + auto_scaler_profile (known after apply)
+
+      + bootstrap_profile (known after apply)
+
+      + default_node_pool {
+          + kubelet_disk_type    = (known after apply)
+          + max_pods             = 30
+          + name                 = "agentpool"
+          + node_count           = 2
+          + node_labels          = (known after apply)
+          + orchestrator_version = (known after apply)
+          + os_disk_size_gb      = (known after apply)
+          + os_disk_type         = "Managed"
+          + os_sku               = (known after apply)
+          + scale_down_mode      = "Delete"
+          + type                 = "VirtualMachineScaleSets"
+          + ultra_ssd_enabled    = false
+          + vm_size              = "Standard_D2s_v3"
+          + vnet_subnet_id       = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet/subnets/aks-subnet"
+          + workload_runtime     = (known after apply)
+        }
+
+      + identity {
+          + principal_id = (known after apply)
+          + tenant_id    = (known after apply)
+          + type         = "SystemAssigned"
+        }
+
+      + kubelet_identity (known after apply)
+
+      + network_profile {
+          + dns_service_ip     = (known after apply)
+          + ip_versions        = (known after apply)
+          + load_balancer_sku  = "standard"
+          + network_data_plane = "azure"
+          + network_mode       = (known after apply)
+          + network_plugin     = "azure"
+          + network_policy     = "azure"
+          + outbound_type      = "loadBalancer"
+          + pod_cidr           = (known after apply)
+          + pod_cidrs          = (known after apply)
+          + service_cidr       = (known after apply)
+          + service_cidrs      = (known after apply)
+
+          + load_balancer_profile (known after apply)
+
+          + nat_gateway_profile (known after apply)
+        }
+
+      + node_provisioning_profile (known after apply)
+
+      + windows_profile (known after apply)
+    }
+
+  # azurerm_postgresql_flexible_server.postgres will be created
+  + resource "azurerm_postgresql_flexible_server" "postgres" {
+      + administrator_login           = "pgadmin"
+      + administrator_password        = (sensitive value)
+      + administrator_password_wo     = (write-only attribute)
+      + auto_grow_enabled             = false
+      + backup_retention_days         = 7
+      + delegated_subnet_id           = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet/subnets/db-subnet"
+      + fqdn                          = (known after apply)
+      + geo_redundant_backup_enabled  = false
+      + id                            = (known after apply)
+      + location                      = "germanywestcentral"
+      + name                          = "learningsteps-postgres"
+      + private_dns_zone_id           = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com"
+      + public_network_access_enabled = true
+      + resource_group_name           = "evolution-rg"
+      + sku_name                      = "B_Standard_B1ms"
+      + storage_mb                    = 32768
+      + storage_tier                  = (known after apply)
+      + tags                          = {
+          + "environment" = "dev"
+          + "project"     = "learningsteps"
+        }
+      + version                       = "15"
+
+      + authentication (known after apply)
+
+      + timeouts {
+          + create = "60m"
+          + delete = "60m"
+        }
+    }
+
+  # azurerm_private_dns_zone.postgres will be updated in-place
+  ~ resource "azurerm_private_dns_zone" "postgres" {
+        id                                                    = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com"
+        name                                                  = "privatelink.postgres.database.azure.com"
+      ~ tags                                                  = {
+          - "created-on" = "2026-07-27T21:24:49.6692658Z" -> null
+        }
+        # (5 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+  # azurerm_private_dns_zone_virtual_network_link.postgres_vnet_link will be updated in-place
+  ~ resource "azurerm_private_dns_zone_virtual_network_link" "postgres_vnet_link" {
+        id                    = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com/virtualNetworkLinks/postgres-vnet-link"
+        name                  = "postgres-vnet-link"
+      ~ tags                  = {
+          - "created-on" = "2026-07-27T21:25:32.4806212Z" -> null
+        }
+        # (5 unchanged attributes hidden)
+    }
+
+  # azurerm_resource_group.infra will be updated in-place
+  ~ resource "azurerm_resource_group" "infra" {
+        id         = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg"
+        name       = "evolution-rg"
+      ~ tags       = {
+          - "created-on" = "2026-07-27T21:24:45.8243719Z" -> null
+        }
+        # (2 unchanged attributes hidden)
+    }
+
+  # azurerm_subnet.aks will be updated in-place
+  ~ resource "azurerm_subnet" "aks" {
+        id                                            = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet/subnets/aks-subnet"
+        name                                          = "aks-subnet"
+        # (9 unchanged attributes hidden)
+
+      ~ delegation {
+            name = "aks-delegation"
+
+          ~ service_delegation {
+              ~ actions = [
+                  - "Microsoft.Network/virtualNetworks/subnets/join/action",
+                ]
+                name    = "Microsoft.ContainerService/managedClusters"
+            }
+        }
+    }
+
+  # azurerm_virtual_network.vnet will be updated in-place
+  ~ resource "azurerm_virtual_network" "vnet" {
+        id                             = "/subscriptions/6a9a0ca4-d17c-4caf-a4d5-25747d82995c/resourceGroups/evolution-rg/providers/Microsoft.Network/virtualNetworks/evolution-vnet"
+        name                           = "evolution-vnet"
+      ~ tags                           = {
+          - "created-on"  = "2026-07-27T21:24:52.5175111Z" -> null
+            "environment" = "dev"
+            "project"     = "learningsteps"
+        }
+        # (10 unchanged attributes hidden)
+    }
+
+Plan: 4 to add, 6 to change, 0 to destroy.
+
+Changes to Outputs:
+  + aks_cluster_id           = (known after apply)
+  + aks_fqdn                 = (known after apply)
+  + postgres_admin_secret_id = (known after apply)
+  + postgres_server_fqdn     = (known after apply)
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
