@@ -28,6 +28,15 @@ jobs:
           resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
 
+      - name: Generate secret.yaml from template
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+        run: |
+          envsubst < k8s-manifests/secret.yaml.template > k8s-manifests/secret.yaml
+
       - name: Substitute Image Placeholder in Deployment
         run: |
           # Grab the ACR server name from your secrets and current Git SHA
@@ -37,15 +46,6 @@ jobs:
           # Replace <acr-server> and <acr_tag> with real values inside deployment.yaml
           sed -i "s|<acr-server>|${ACR_SERVER}|g" k8s-manifests/deployment.yaml
           sed -i "s|<acr_tag>|${IMAGE_TAG}|g" k8s-manifests/deployment.yaml
-
-      - name: Generate secret.yaml from template
-        env:
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_HOST: ${{ secrets.DB_HOST }}
-        run: |
-          envsubst < k8s-manifests/secret.yaml.template > k8s-manifests/secret.yaml
 
       - name: Prepare deployment manifest (inject ACR and tag)
         env:

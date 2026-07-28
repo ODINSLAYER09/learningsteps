@@ -32,6 +32,7 @@ spec:
             - containerPort: 8000
           envFrom:
             - configMapRef: { name: learningsteps-config }
+            - secretRef:    { name: learningsteps-secrets }
           resources:
             requests: { cpu: 100m, memory: 128Mi }   # HPA needs requests
             limits:   { cpu: 500m, memory: 256Mi }
