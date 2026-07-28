@@ -22,8 +22,10 @@ spec:
             - "sh"
             - "-c"
             - |
-              psql $DATABASE_URL -c "CREATE DATABASE learning_journal;" || true
-              psql $DATABASE_URL -f /scripts/database_setup.sql
+              # 1. Connect to the default 'postgres' database to create 'learning_journal'
+              psql "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/postgres?sslmode=require" -c "CREATE DATABASE learning_journal;" || true
+              # 2. Now connect to 'learning_journal' using $DATABASE_URL to apply setup.sql
+              psql "$DATABASE_URL" -f /scripts/database_setup.sql
           envFrom:
             - configMapRef: { name: learningsteps-config }
             - secretRef: { name: learningsteps-secrets }
