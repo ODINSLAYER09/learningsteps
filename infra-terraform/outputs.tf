@@ -57,3 +57,13 @@ output "postgres_admin_secret_id" {
   description = "The Key Vault secret ID for the Postgres admin password."
   value       = azurerm_key_vault_secret.postgres_admin_password.id
 }
+
+output "acr_id" {
+  description = "The ID of the created Azure Container Registry."
+  value       = azurerm_container_registry.acr.id
+}
+
+output "acr_login_server" {
+  description = "The login server for the Azure Container Registry."
+  value       = azurerm_container_registry.acr.login_server
+}
