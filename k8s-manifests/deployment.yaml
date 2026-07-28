@@ -18,7 +18,12 @@ spec:
         - name: init-db
           image: postgres:15-alpine
           # run the SQL script to create the table and indexes:
-          command: ["sh", "-c", "psql $DATABASE_URL -f /scripts/database_setup.sql"]
+          command: 
+            - "sh"
+            - "-c"
+            - |
+              psql $DATABASE_URL -c "CREATE DATABASE learning_journal;" || true
+              psql $DATABASE_URL -f /scripts/database_setup.sql
           envFrom:
             - configMapRef: { name: learningsteps-config }
             - secretRef: { name: learningsteps-secrets }
