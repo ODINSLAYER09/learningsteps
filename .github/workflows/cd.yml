@@ -37,16 +37,6 @@ jobs:
         run: |
           envsubst < k8s-manifests/secret.yaml.template > k8s-manifests/secret.yaml
 
-      - name: Substitute Image Placeholder in Deployment
-        run: |
-          # Grab the ACR server name from your secrets and current Git SHA
-          ACR_SERVER="${{ secrets.ACR_SERVER }}"
-          IMAGE_TAG="${{ github.sha }}"
-
-          # Replace <acr-server> and <acr_tag> with real values inside deployment.yaml
-          sed -i "s|<acr-server>|${ACR_SERVER}|g" k8s-manifests/deployment.yaml
-          sed -i "s|<acr_tag>|${IMAGE_TAG}|g" k8s-manifests/deployment.yaml
-
       - name: Prepare deployment manifest (inject ACR and tag)
         env:
           ACR_NAME: ${{ secrets.ACR_NAME }}
@@ -59,6 +49,7 @@ jobs:
 
       - name: Apply Kubernetes manifests
         run: |
+          kubectl apply -f k8s-manifests/secret.yaml
           kubectl apply -f k8s-manifests/configmap.yaml || true
           kubectl apply -f .github/workflow-rendered/deployment.yaml
           kubectl apply -f k8s-manifests/service.yaml
