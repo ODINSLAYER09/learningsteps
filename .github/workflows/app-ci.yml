@@ -83,7 +83,7 @@ jobs:
         run: |
           echo "${{ env.ACR_PASSWORD }}" | docker login ${{ env.ACR_SERVER }} -u "${{ env.ACR_USERNAME }}" --password-stdin
         env:
-          ACR__PASSWORD: ${{ secrets.ACR_PASSWORD }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
           ACR_SERVER: ${{ secrets.ACR_SERVER }}
           ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
 
