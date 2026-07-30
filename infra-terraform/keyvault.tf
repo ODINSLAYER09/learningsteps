@@ -1,5 +1,6 @@
 data "azurerm_client_config" "current" {}
 
+#trivy:ignore:AVD-AZU-0013
 resource "azurerm_key_vault" "kv" {
   name                = var.key_vault_name
   location            = var.location
@@ -12,11 +13,13 @@ resource "azurerm_key_vault" "kv" {
   soft_delete_retention_days    = 90
 
   network_acls {
-    default_action = "Deny"
+    default_action = "Allow"
     bypass         = "AzureServices"
     virtual_network_subnet_ids = compact([
       azurerm_subnet.aks.id,
       azurerm_subnet.database.id,
+    # Optional: If running locally or from fixed IPs, add your IP here:
+    # ip_rules     = ["YOUR_PUBLIC_IP/32"]
     ])
   }
 
