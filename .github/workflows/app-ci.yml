@@ -5,10 +5,21 @@ name: "Learningsteps CI"
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - master
+    paths:
+      - "api/**"
+      - "k8s-manifests/**"
+      - ".github/workflows/app-ci.yml"
   pull_request:
-    branches: [ main ]
-  workflow_dispatch: {}
+    branches:
+      - main
+      - master
+    paths:
+      - "api/**"
+      - "k8s-manifests/**"
+  workflow_dispatch:
 
 # Single job that runs on Ubuntu to: checkout code, setup Python, run lint/tests, and build the image
 jobs:
