@@ -2,6 +2,34 @@
 
 This repository contains the LearningSteps API, a FastAPI application backed by PostgreSQL and deployed to Azure Kubernetes Service (AKS). It also includes Terraform-based infrastructure automation, GitHub Actions CI/CD workflows, and Kubernetes manifests for app deployment.
 
+## Table of Contents
+
+- [Getting Started](#🚀-getting-started)
+- [🎯 Development Tasks](#🎯-development-tasks)
+  - [1. API Implementation (Required)](#1-api-implementation-required)
+  - [2. Logging Setup (Required)](#2-logging-setup-required)
+  - [3. Data Model Improvements (Optional)](#3-data-model-improvements-optional)
+  - [4. Cloud CLI Setup (Required for Deployment)](#4-cloud-cli-setup-required-for-deployment)
+- [Data Schema](#📊-data-schema)
+- [Explore Your Database (Optional)](#🔎-explore-your-database-optional)
+- [Troubleshooting](#🔧-troubleshooting)
+- [What this project does](#what-this-project-does)
+- [Features included](#features-included)
+- [Project structure](#project-structure)
+- [Manual Azure prerequisites](#manual-azure-prerequisites)
+- [What files must be updated](#what-files-must-be-updated)
+- [Variables to update from manually created Azure resources](#variables-to-update-from-manually-created-azure-resources)
+- [GitHub secrets and environment variables needed](#github-secrets-and-environment-variables-needed)
+- [Azure permissions required](#azure-permissions-required)
+- [Key Vault secrets and keys in scope](#key-vault-secrets-and-keys-in-scope)
+- [What the pipelines do](#what-the-pipelines-do)
+- [What is in scope for each pipeline](#what-is-in-scope-for-each-pipeline)
+- [What is out of scope](#what-is-out-of-scope)
+- [How to set this project up and deploy to Azure](#how-to-set-this-project-up-and-deploy-to-azure)
+- [Monitoring and observability](#monitoring-and-observability)
+- [Important security notes](#important-security-notes)
+- [Final summary](#final-summary)
+
 ## What this project does
 
 - Runs a Python FastAPI API for a learning journal.
@@ -29,6 +57,86 @@ This repository contains the LearningSteps API, a FastAPI application backed by 
 - `k8s-manifests/` - Kubernetes YAMLs for deployment, service, HPA, config, and secrets.
 - `.github/workflows/` - GitHub Actions pipelines for CI, CD, and infrastructure.
 - `README2.md` - this guide.
+
+## 🚀 Getting Started
+
+Follow these steps to prepare LearningSteps for Azure deployment:
+
+1. Clone the repository and inspect the project structure.
+2. Prepare Azure resources manually or using `infra-terraform/`.
+3. Configure GitHub Secrets for Azure, ACR, AKS, and PostgreSQL.
+4. Run the CI pipeline to validate the application and build the container image.
+5. Run the CD pipeline to deploy the app to AKS.
+
+## 🎯 Development Tasks
+
+This section describes the main development tasks for the project.
+
+### 1. API Implementation (Required)
+
+- Implement and validate FastAPI endpoints in `api/`.
+- Ensure journal entry CRUD operations are complete.
+- Add tests for the API routes and response behavior.
+
+### 2. Logging Setup (Required)
+
+- Configure structured application logging.
+- Log startup, request handling, and error events.
+- Ensure logs are visible locally and after deployment to AKS.
+
+### 3. Data Model Improvements (Optional)
+
+- Review the current data model and improve table structure.
+- Add indexes, constraints, or normalized fields if needed.
+- Keep schema changes optional unless required for functionality.
+
+### 4. Cloud CLI Setup (Required for Deployment)
+
+- Install Azure CLI, `kubectl`, and `helm`.
+- Authenticate with Azure and select the correct subscription.
+- Verify access to AKS and ACR.
+- Use CLI tools to run Terraform, deploy Kubernetes manifests, and manage monitoring.
+
+## 📊 Data Schema
+
+The LearningSteps data schema focuses on journal entries and related metadata. PostgreSQL is used as the backing store, and database initialization SQL is defined in `k8s-manifests/configmap.yaml`.
+
+Each journal entry follows this structure:
+
+| Field       | Type      | Description                                | Validation                   |
+|-------------|-----------|--------------------------------------------|------------------------------|
+| id          | string    | Unique identifier (UUID)                   | Auto-generated               |
+| work        | string    | What did you work on today?                | Required, max 256 characters |
+| struggle    | string    | What's one thing you struggled with today? | Required, max 256 characters |
+| intention   | string    | What will you study/work on tomorrow?      | Required, max 256 characters |
+| created_at  | datetime  | When entry was created                     | Auto-generated UTC           |
+| updated_at  | datetime  | When entry was last updated                | Auto-updated UTC             |
+
+### Typical schema elements
+
+- Journal entry text and metadata
+- Entry date and timestamps
+- Database connection information
+- User or author metadata (when applicable)
+
+## 🔎 Explore Your Database (Optional)
+
+These exploration tasks are optional, but helpful for validation:
+
+- Use `psql` or a database client to inspect tables and records.
+- Use `kubectl exec` to query from a pod if the database is only accessible from the cluster.
+- Check the schema after deployment and verify the expected tables exist.
+
+## 🔧 Troubleshooting
+
+Common issues and checks:
+
+- Verify Azure CLI login and correct subscription.
+- Confirm GitHub secrets are properly set.
+- Ensure AKS has `AcrPull` access to ACR.
+- Check the AKS authorized IP ranges for API server access.
+- Validate PostgreSQL connectivity from AKS.
+- Confirm Key Vault access policies allow AKS managed identity to get secrets.
 
 ## Manual Azure prerequisites
 
