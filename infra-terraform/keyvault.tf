@@ -54,3 +54,14 @@ resource "azurerm_key_vault_secret" "postgres_admin_password" {
 
   depends_on = [azurerm_key_vault_access_policy.owner, azurerm_key_vault_access_policy.aks]
 }
+
+# Example for Access Policies in keyvault.tf:
+resource "azurerm_key_vault_access_policy" "pipeline_policy" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id # Pipeline / executing SP
+
+  secret_permissions = [
+    "Get", "List", "Set", "Delete"
+  ]
+}
