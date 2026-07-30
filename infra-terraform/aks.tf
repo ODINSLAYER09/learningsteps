@@ -5,6 +5,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix                        = "${var.aks_cluster_name}-dns"
   role_based_access_control_enabled = true
 
+
   api_server_access_profile {
     authorized_ip_ranges = [
       "91.11.237.95/32" # Replace with your public IP, office IP, or NAT gateway CIDR
@@ -20,8 +21,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     type           = "VirtualMachineScaleSets"
   }
 
-
-
   identity {
     type = "SystemAssigned"
   }
@@ -36,12 +35,4 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = var.tags
-}
-
-# Terraform equivalent of: az aks update --attach-acr
-resource "azurerm_role_assignment" "aks_acr_pull" {
-  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  role_definition_name             = "AcrPull"
-  scope                            = azurerm_container_registry.acr.id
-  skip_service_principal_aad_check = true # avoids AAD replication race
 }
