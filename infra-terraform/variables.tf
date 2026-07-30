@@ -124,7 +124,7 @@ variable "key_vault_sku" {
 variable "tags" {
   description = "Tags to apply to Azure resources."
   type        = map(string)
-  default     = {
+  default = {
     environment = "dev"
     project     = "learningsteps"
   }

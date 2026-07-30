@@ -3,15 +3,19 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = azurerm_resource_group.infra.location
   resource_group_name = azurerm_resource_group.infra.name
   dns_prefix          = "${var.aks_cluster_name}-dns"
+  api_server_authorized_ip_ranges = "91.11.237.95/32" # Replace with your public IP address or VPN subnet range
+  role_based_access_control_enabled = true
 
   default_node_pool {
-    name            = "agentpool"
-    node_count      = var.aks_node_count
-    vm_size         = var.aks_node_vm_size
-    vnet_subnet_id  = azurerm_subnet.aks.id
-    max_pods        = var.aks_max_pods
-    type            = "VirtualMachineScaleSets"
+    name           = "agentpool"
+    node_count     = var.aks_node_count
+    vm_size        = var.aks_node_vm_size
+    vnet_subnet_id = azurerm_subnet.aks.id
+    max_pods       = var.aks_max_pods
+    type           = "VirtualMachineScaleSets"
   }
+
+
 
   identity {
     type = "SystemAssigned"
@@ -22,8 +26,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_policy    = "azure"
     load_balancer_sku = "standard"
     outbound_type     = "loadBalancer"
-    service_cidr       = "172.16.0.0/16"
-    dns_service_ip     = "172.16.0.10"
+    service_cidr      = "172.16.0.0/16"
+    dns_service_ip    = "172.16.0.10"
   }
 
   tags = var.tags
@@ -34,5 +38,5 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   principal_id                     = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.main.id
-  skip_service_principal_aad_check = true    # avoids AAD replication race
+  skip_service_principal_aad_check = true # avoids AAD replication race
 }

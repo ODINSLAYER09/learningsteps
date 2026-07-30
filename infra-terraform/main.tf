@@ -13,23 +13,23 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "aks" {
-  name                                  = var.aks_subnet_name
-  resource_group_name                   = azurerm_resource_group.infra.name
-  virtual_network_name                  = azurerm_virtual_network.vnet.name
-  address_prefixes                      = [var.aks_subnet_prefix]
-  service_endpoints                     = ["Microsoft.KeyVault"]
-  private_endpoint_network_policies     = "Disabled"
+  name                                          = var.aks_subnet_name
+  resource_group_name                           = azurerm_resource_group.infra.name
+  virtual_network_name                          = azurerm_virtual_network.vnet.name
+  address_prefixes                              = [var.aks_subnet_prefix]
+  service_endpoints                             = ["Microsoft.KeyVault"]
+  private_endpoint_network_policies             = "Disabled"
   private_link_service_network_policies_enabled = false
 
 }
 
 resource "azurerm_subnet" "database" {
-  name                                  = var.db_subnet_name
-  resource_group_name                   = azurerm_resource_group.infra.name
-  virtual_network_name                  = azurerm_virtual_network.vnet.name
-  address_prefixes                      = [var.db_subnet_prefix]
-  service_endpoints                     = ["Microsoft.KeyVault"]
-  private_endpoint_network_policies     = "Disabled"
+  name                                          = var.db_subnet_name
+  resource_group_name                           = azurerm_resource_group.infra.name
+  virtual_network_name                          = azurerm_virtual_network.vnet.name
+  address_prefixes                              = [var.db_subnet_prefix]
+  service_endpoints                             = ["Microsoft.KeyVault"]
+  private_endpoint_network_policies             = "Disabled"
   private_link_service_network_policies_enabled = false
 
   delegation {

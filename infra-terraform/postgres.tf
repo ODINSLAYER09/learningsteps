@@ -17,13 +17,13 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   location            = azurerm_resource_group.infra.location
   version             = "15"
 
-  administrator_login          = var.postgres_admin_username
-  administrator_password       = var.postgres_admin_password
-  storage_mb                  = var.postgres_storage_mb
-  backup_retention_days       = var.postgres_backup_retention_days
-  geo_redundant_backup_enabled = false
-  delegated_subnet_id         = azurerm_subnet.database.id
-  private_dns_zone_id         = azurerm_private_dns_zone.postgres.id
+  administrator_login           = var.postgres_admin_username
+  administrator_password        = var.postgres_admin_password
+  storage_mb                    = var.postgres_storage_mb
+  backup_retention_days         = var.postgres_backup_retention_days
+  geo_redundant_backup_enabled  = false
+  delegated_subnet_id           = azurerm_subnet.database.id
+  private_dns_zone_id           = azurerm_private_dns_zone.postgres.id
   public_network_access_enabled = false
 
   sku_name = var.postgres_sku_name
