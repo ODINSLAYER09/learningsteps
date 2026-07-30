@@ -8,7 +8,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   api_server_access_profile {
     authorized_ip_ranges = [
-      "91.11.237.95/32" # Replace with your public IP, office IP, or NAT gateway CIDR
+      "0.0.0.0/0" #"91.11.237.95/32" # Replace with your public IP, office IP, or NAT gateway CIDR
     ]
   }
 
