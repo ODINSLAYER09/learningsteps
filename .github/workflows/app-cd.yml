@@ -30,6 +30,14 @@ jobs:
           resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
 
+      - name: Whitelist GitHub Runner IP in AKS
+        run: |
+          RUNNER_IP=$(curl -s https://api.ipify.org)
+          az aks update \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name ${{ secrets.AKS_CLUSTER_NAME }} \
+            --api-server-authorized-ip-ranges "$RUNNER_IP/32"
+
       - name: Generate secret.yaml from template
         env:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
