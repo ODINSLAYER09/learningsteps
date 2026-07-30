@@ -22,7 +22,7 @@ override.tf.json
 *.tfplan.*
 
 # Sensitive variable files
-*.tfvars
+#*.tfvars
 *.tfvars.json
 
 # Local CLI configuration
