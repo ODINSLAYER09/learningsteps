@@ -135,12 +135,9 @@ jobs:
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && vars.ENABLE_AZURE_DEPLOY == 'true'
     environment: production
     env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      TF_VAR_postgresql_admin_password: ${{ secrets.POSTGRESQL_PASSWORD }}
+      ARM_USE_AZUREAD: "true" # Forces backend and provider to use Azure AD auth
+      TF_VAR_subscription_id: ${{ secrets.EVOLUTION_SUBSCRIPTION_ID }}
+      TF_VAR_postgres_admin_password: ${{ secrets.POSTGRES_PASSWORD }}
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
