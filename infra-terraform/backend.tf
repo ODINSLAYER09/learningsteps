@@ -4,5 +4,7 @@ terraform {
     storage_account_name = "tfstateblobj"
     container_name       = "tfstate"
     key                  = "application/learningsteps/terraform.tfstate"
+    # Force Terraform to use Entra ID RBAC instead of requesting Storage Account Keys
+    use_azuread_auth     = true
   }
 }

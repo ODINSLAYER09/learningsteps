@@ -91,6 +91,7 @@ jobs:
     needs: terraform-validate
     if: vars.ENABLE_AZURE_DEPLOY == 'true' && success()
     env:
+      ARM_USE_AZUREAD: "true" # Forces backend and provider to use Azure AD auth
       TF_VAR_subscription_id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       TF_VAR_postgresql_admin_password: ${{ secrets.POSTGRESQL_ADMIN_PASSWORD }}
     defaults:
