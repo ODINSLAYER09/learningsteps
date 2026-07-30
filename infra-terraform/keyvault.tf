@@ -18,8 +18,8 @@ resource "azurerm_key_vault" "kv" {
     virtual_network_subnet_ids = compact([
       azurerm_subnet.aks.id,
       azurerm_subnet.database.id,
-    # Optional: If running locally or from fixed IPs, add your IP here:
-    # ip_rules     = ["YOUR_PUBLIC_IP/32"]
+      # Optional: If running locally or from fixed IPs, add your IP here:
+      # ip_rules     = ["YOUR_PUBLIC_IP/32"]
     ])
   }
 
