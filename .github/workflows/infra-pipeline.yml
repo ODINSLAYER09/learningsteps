@@ -92,8 +92,8 @@ jobs:
     if: vars.ENABLE_AZURE_DEPLOY == 'true' && success()
     env:
       ARM_USE_AZUREAD: "true" # Forces backend and provider to use Azure AD auth
-      subscription_id: ${{ secrets.EVOLUTION_SUBSCRIPTION_ID }}
-      postgres_admin_password: ${{ secrets.POSTGRES_PASSWORD }}
+      TF_VAR_subscription_id: ${{ secrets.EVOLUTION_SUBSCRIPTION_ID }}
+      TF_VAR_postgres_admin_password: ${{ secrets.POSTGRES_PASSWORD }}
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
