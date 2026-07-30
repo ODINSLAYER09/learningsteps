@@ -10,27 +10,24 @@ resource "azurerm_key_vault" "kv" {
 
   public_network_access_enabled = true
   purge_protection_enabled      = false
-  soft_delete_retention_days    = 90
+  soft_delete_retention_days   = 90
 
   network_acls {
     default_action = "Allow"
     bypass         = "AzureServices"
   }
 
+  # Add access policy directly inside the key vault block:
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id # Service Principal ID
+
+    secret_permissions = [
+      "Get", "List", "Set", "Delete", "Purge"
+    ]
+  }
+
   tags = var.tags
-}
-
-resource "azurerm_key_vault_access_policy" "owner" {
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
-
-  secret_permissions = [
-    "Get",
-    "List",
-    "Set",
-    "Delete",
-  ]
 }
 
 resource "azurerm_key_vault_access_policy" "aks" {
@@ -50,15 +47,4 @@ resource "azurerm_key_vault_secret" "postgres_admin_password" {
   key_vault_id = azurerm_key_vault.kv.id
 
   depends_on = [azurerm_key_vault_access_policy.owner, azurerm_key_vault_access_policy.aks]
-}
-
-# Example for Access Policies in keyvault.tf:
-resource "azurerm_key_vault_access_policy" "pipeline_policy" {
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id # Pipeline / executing SP
-
-  secret_permissions = [
-    "Get", "List", "Set", "Delete"
-  ]
 }
