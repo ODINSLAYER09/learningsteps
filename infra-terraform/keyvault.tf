@@ -10,7 +10,7 @@ resource "azurerm_key_vault" "kv" {
 
   public_network_access_enabled = true
   purge_protection_enabled      = false
-  soft_delete_retention_days   = 90
+  soft_delete_retention_days    = 90
 
   network_acls {
     default_action = "Allow"
