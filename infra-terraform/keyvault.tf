@@ -46,5 +46,5 @@ resource "azurerm_key_vault_secret" "postgres_admin_password" {
   value        = var.postgres_admin_password
   key_vault_id = azurerm_key_vault.kv.id
 
-  depends_on = [azurerm_key_vault_access_policy.owner, azurerm_key_vault_access_policy.aks]
+  depends_on = [azurerm_key_vault_access_policy.aks]
 }
