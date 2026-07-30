@@ -1,10 +1,15 @@
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = var.aks_cluster_name
-  location            = azurerm_resource_group.infra.location
-  resource_group_name = azurerm_resource_group.infra.name
-  dns_prefix                          = "${var.aks_cluster_name}-dns"
-  api_server_authorized_ip_ranges    = ["91.11.237.95/32"]
-  role_based_access_control_enabled  = true
+  name                              = var.aks_cluster_name
+  location                          = azurerm_resource_group.infra.location
+  resource_group_name               = azurerm_resource_group.infra.name
+  dns_prefix                        = "${var.aks_cluster_name}-dns"
+  role_based_access_control_enabled = true
+
+  api_server_access_profile {
+    authorized_ip_ranges = [
+      "91.11.237.95/32" # Replace with your public IP, office IP, or NAT gateway CIDR
+    ]
+  }
 
   default_node_pool {
     name           = "agentpool"
